@@ -1,0 +1,214 @@
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+
+const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { signUp } = useAuth();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    
+    const { data, error } = await signUp(values.email, values.password, values.name);
+    
+    setIsLoading(false);
+    
+    if (error) {
+      toast({
+        title: "Error creating account",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.user) {
+      toast({
+        title: "Account created!",
+        description: "You have successfully signed up.",
+      });
+      navigate("/profile-setup");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cre8-dark to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <Link to="/" className="inline-block">
+            <img 
+              src="/lovable-uploads/43c4d891-861d-4066-b61a-2dc42b49a39b.png" 
+              alt="CRE8HUB Logo" 
+              className="h-24 mx-auto mb-2"
+            />
+          </Link>
+          <h2 className="mt-2 text-3xl font-bold text-white">Create your account</h2>
+          <p className="mt-2 text-sm text-gray-400">
+            Already have an account?{" "}
+            <Link to="/signin" className="font-medium text-cre8-blue hover:text-cre8-purple">
+              Sign in
+            </Link>
+          </p>
+        </div>
+        
+        <Card className="bg-cre8-dark/50 backdrop-blur-lg border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white text-xl">Sign Up</CardTitle>
+            <CardDescription className="text-gray-400">
+              Enter your details to create your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Full Name</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="John Doe" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="you@example.com" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex items-center mt-2">
+                  <input
+                    id="terms"
+                    name="terms"
+                    type="checkbox"
+                    className="h-4 w-4 text-cre8-blue focus:ring-cre8-blue border-gray-300 rounded"
+                    required
+                  />
+                  <label htmlFor="terms" className="ml-2 block text-sm text-gray-400">
+                    I agree to the{" "}
+                    <a href="#" className="text-cre8-blue hover:text-cre8-purple">
+                      Terms of Service
+                    </a>{" "}
+                    and{" "}
+                    <a href="#" className="text-cre8-blue hover:text-cre8-purple">
+                      Privacy Policy
+                    </a>
+                  </label>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full mt-6 bg-gradient-to-r from-cre8-blue to-cre8-purple hover:opacity-90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating Account..." : "Create Account"}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex justify-center border-t border-white/10 pt-4">
+            <p className="text-sm text-gray-400">
+              Already have an account?{" "}
+              <Link to="/signin" className="font-medium text-cre8-blue hover:text-cre8-purple">
+                Sign in
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;

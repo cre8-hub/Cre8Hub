@@ -1,0 +1,170 @@
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+
+const formSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+const SignIn = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { signIn } = useAuth();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    
+    const { data, error } = await signIn(values.email, values.password);
+    
+    setIsLoading(false);
+    
+    if (error) {
+      toast({
+        title: "Error signing in",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.user) {
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully signed in.",
+      });
+      navigate("/");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cre8-dark to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <Link to="/" className="inline-block">
+            <img 
+              src="/lovable-uploads/43c4d891-861d-4066-b61a-2dc42b49a39b.png" 
+              alt="CRE8HUB Logo" 
+              className="h-24 mx-auto mb-2"
+            />
+          </Link>
+          <h2 className="mt-2 text-3xl font-bold text-white">Welcome back</h2>
+          <p className="mt-2 text-sm text-gray-400">
+            Don't have an account?{" "}
+            <Link to="/signup" className="font-medium text-cre8-blue hover:text-cre8-purple">
+              Sign up
+            </Link>
+          </p>
+        </div>
+        
+        <Card className="bg-cre8-dark/50 backdrop-blur-lg border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white text-xl">Sign In</CardTitle>
+            <CardDescription className="text-gray-400">
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="you@example.com" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••" 
+                          className="bg-cre8-dark/70 border-white/20 text-white" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      id="remember-me"
+                      name="remember-me"
+                      type="checkbox"
+                      className="h-4 w-4 text-cre8-blue focus:ring-cre8-blue border-gray-300 rounded"
+                    />
+                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
+                      Remember me
+                    </label>
+                  </div>
+
+                  <div className="text-sm">
+                    <a href="#" className="font-medium text-cre8-blue hover:text-cre8-purple">
+                      Forgot your password?
+                    </a>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full mt-6 bg-gradient-to-r from-cre8-blue to-cre8-purple hover:opacity-90"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing In..." : "Sign In"}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex justify-center border-t border-white/10 pt-4">
+            <p className="text-sm text-gray-400">
+              Don't have an account?{" "}
+              <Link to="/signup" className="font-medium text-cre8-blue hover:text-cre8-purple">
+                Sign up
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default SignIn;
