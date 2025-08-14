@@ -10,9 +10,9 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/43c4d891-861d-4066-b61a-2dc42b49a39b.png" 
+                src="/lovable-uploads/logomain.png" 
                 alt="CRE8HUB Logo" 
-                className="h-8 w-auto"
+                className="h-20 w-auto"
               />
               <span className="ml-2 text-xl font-bold text-white">CRE8HUB</span>
             </Link>
