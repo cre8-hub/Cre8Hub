@@ -32,7 +32,7 @@ export const Header = () => {
     },
     {
       name: "About",
-      link: "#About",
+      link: "#faq",
     },
   ];
   return (

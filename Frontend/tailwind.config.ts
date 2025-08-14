@@ -55,12 +55,27 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-background': 'var(--gradient-background)',
+				'gradient-orb': 'var(--gradient-orb)'
+			},
+			boxShadow: {
+				'glow-sm': '0 0 20px hsla(var(--glow-secondary))',
+				'glow': '0 0 40px hsla(var(--glow-primary))',
+				'glow-lg': '0 0 60px hsla(var(--glow-primary))'
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)',
+				'bounce': 'var(--transition-bounce)'
+			},
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

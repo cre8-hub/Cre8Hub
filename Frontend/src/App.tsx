@@ -12,7 +12,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import ProfileSetup from "./pages/ProfileSetup";
-
+import Cre8Echo from "./pages/Cre8Echo";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,6 +29,7 @@ const App = () => (
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/profile-setup" element={<ProfileSetup />} />
                   <Route path="*" element={<NotFound />} />
+                  <Route path="/cre8echo" element={<Cre8Echo />} />
                 </Routes>
                 <Toaster />
                 <Sonner />
