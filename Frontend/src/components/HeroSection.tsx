@@ -19,8 +19,8 @@ const HeroSection = () => {
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            CRE8HUB combines AI-powered tools and insights to help digital creators optimize their content and grow their audience like never before.
+          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl font-semibold mx-auto leading-relaxed">
+          Better content. Deeper insights. Bigger growth.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
