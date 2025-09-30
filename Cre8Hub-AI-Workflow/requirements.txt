@@ -28,3 +28,5 @@ qdrant-client
 pytrends
 logger
 requests
+redis
+pymongo

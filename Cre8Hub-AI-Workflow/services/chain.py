@@ -1,9 +1,6 @@
-import logger
 import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
-from services.ingest import get_vb
-from services.llm import get_llm
 from langchain.chains import RetrievalQA
 from langchain.chains import LLMChain
 from langchain.schema import Document
@@ -42,8 +39,9 @@ def get_chain(transcripts: Optional[List[str]] = None):
             retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": len(docs)})
             
         else:
-            # Use existing FAISS index (fallback)
+            # Use existing FAISS index (fallback) - lazy import to avoid heavy imports on module load
             logger.info("Using existing FAISS index")
+            from services.ingest import get_vb
             db = get_vb()
             retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 1000})
 
@@ -97,6 +95,7 @@ def get_chain(transcripts: Optional[List[str]] = None):
         )
 
         logger.info("Getting LLM instance...")
+        from services.llm import get_llm
         llm = get_llm("gemma2:2b")
         logger.info("LLM instance obtained successfully.")
 
@@ -203,7 +202,7 @@ generator_chain = LLMChain(llm=generator_llm, prompt=generator_tmpl, verbose=Fal
 critic_chain = LLMChain(llm=critic_llm, prompt=critic_tmpl, verbose=False)
 
 __all__ = [
-    "extract_chain",
+    "get_chain",
     "generator_chain",
     "critic_chain",
     "GEN_MODEL",

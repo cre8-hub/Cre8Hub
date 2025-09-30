@@ -36,7 +36,7 @@ DESCRIPTION:
 
 
 def ingest():
-    file_path = "/Users/prathameshpatil/Cre8Hub-AI-Workflow/data/mrbeast.csv"
+    file_path = "/Users/prathameshpatil/Cre8hub/Cre8Hub-AI-Workflow/data/mrbeast.csv"
     docs = get_doc(file_path)
     embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
@@ -44,7 +44,7 @@ def ingest():
     db.save_local("mrbeast_faiss_index")
 
 def get_vb():
-    docs = get_doc("/Users/prathameshpatil/Cre8Hub-AI-Workflow/data/mrbeast.csv")
+    docs = get_doc("/Users/prathameshpatil/Cre8hub/Cre8Hub-AI-Workflow/data/mrbeast.csv")
 
     embeddings = HuggingFaceEmbeddings(
         model_name="all-MiniLM-L6-v2",

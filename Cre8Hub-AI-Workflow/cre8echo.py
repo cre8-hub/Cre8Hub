@@ -15,6 +15,7 @@ from services.chain import PLATFORM_TEMPLATES
 from models.models import ContentRequest, SaveOutputRequest
 
 # --------------- STREAMING CALLBACK HANDLER ----------------
+
 class StreamingCallbackHandler(BaseCallbackHandler):
     def __init__(self):
         self.tokens = []
@@ -74,14 +75,14 @@ except json.JSONDecodeError:
 try:
     generator_llm = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-exp",
-        api_key=GOOGLE_API_KEY, 
-        temperature=0.9, 
+        google_api_key=GOOGLE_API_KEY,
+        temperature=0.9,
         max_output_tokens=4048,
         streaming=True  # Enable streaming
     )
     critic_llm = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-exp",
-        api_key=GOOGLE_API_KEY, 
+        google_api_key=GOOGLE_API_KEY,
         temperature=0.7,
         max_output_tokens=2048,
         streaming=True  # Enable streaming
