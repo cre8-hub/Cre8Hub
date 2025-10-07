@@ -242,7 +242,7 @@ export function PlatformCard({ platform, title, description, onSelect, isSelecte
           )}
         </div>
         
-        {showTranscriptRequest && (
+        {showTranscriptRequest && platform === "youtube" && (
           <div className="mt-4 p-4 bg-white/20 rounded-xl space-y-3">
             <div className="flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-cosmic-glow" />

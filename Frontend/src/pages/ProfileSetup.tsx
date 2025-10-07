@@ -274,7 +274,7 @@ const ProfileSetup = () => {
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto h-48 w-48 -mb-10 flex items-center justify-center ">
-            <img src="../../public/lovable-uploads/logomain.png" alt="" />
+            <img src="/lovable-uploads/logomain.png" alt="CRE8HUB Logo" />
           </div>
           <h2 className="text-3xl font-bold text-white">Set Up Your Profile</h2>
           <p className="mt-2 text-sm text-gray-300">
