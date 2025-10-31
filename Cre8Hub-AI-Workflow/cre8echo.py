@@ -13,6 +13,8 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.base import BaseCallbackHandler
 from services.chain import PLATFORM_TEMPLATES
 from models.models import ContentRequest, SaveOutputRequest
+from dotenv import load_dotenv
+load_dotenv()
 
 # --------------- STREAMING CALLBACK HANDLER ----------------
 

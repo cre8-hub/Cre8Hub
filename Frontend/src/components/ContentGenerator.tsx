@@ -123,7 +123,7 @@ export function ContentGenerator() {
         iterations: 3
       };
 
-      const response = await fetch(`${import.meta.env.VITE_AI_WORKFLOW_URL || 'http://localhost:6969'}/generate-stream`, {
+      const response = await fetch(`${import.meta.env.VITE_AI_WORKFLOW_URL}/generate-stream`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
