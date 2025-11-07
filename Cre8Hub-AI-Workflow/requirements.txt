@@ -1,12 +1,12 @@
 fastapi
 uvicorn[standard]
 
-# LangChain & related components
-langchain>=0.2.5,<0.3
-langchain-community>=0.2.5,<0.3
-langchain-core>=0.2.5,<0.3
-langchain-text-splitters>=0.2.2,<0.3
-langchain-huggingface>=0.0.3
+# LangChain & related components (pinned to 0.2.x for LLMChain compatibility)
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
+langchain-text-splitters==0.2.4
+langchain-huggingface
 
 # Embeddings
 sentence-transformers
@@ -22,8 +22,9 @@ faiss-cpu
 # If you're using dotenv to load env vars
 python-dotenv
 pydantic
-# If using Google GenAI (optional, but you imported it earlier)
-langchain-google-genai
+# Google GenAI (compatible with both cre8echo and cre8canvas)
+langchain-google-genai==1.0.10
+google-generativeai>=0.8.0
 pandas
 python-multipart
 qdrant-client
@@ -32,3 +33,6 @@ logger
 requests
 redis
 pymongo
+
+# Image processing
+Pillow>=10.0.0

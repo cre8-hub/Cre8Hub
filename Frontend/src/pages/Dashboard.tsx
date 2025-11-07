@@ -6,14 +6,18 @@ import { LogOut, User, Settings, Plus, Palette, Video, Sparkles, Clock, Trending
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../public/lovable-uploads/logomain.png';
+import { useBackendAuth } from '@/hooks/useBackendAuth';
+
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user] = useState({
-    name: "Sarah Johnson",
-    email: "sarah@example.com",
-    avatar: "",
-    memberSince: "January 2025"
-  });
+  // const [user] = useState({
+  //   name: "Sarah Johnson",
+  //   email: "sarah@example.com",
+  //   avatar: "",
+  //   memberSince: "January 2025"
+  // });
+  const { user } = useBackendAuth();
 
   const getInitials = (name: string) => {
     return name
@@ -148,7 +152,7 @@ const Dashboard = () => {
               <div className="flex items-center space-x-3">
                 <Avatar className="h-8 w-8 ring-2 ring-purple-500/30 ring-offset-2 ring-offset-slate-900">
                   <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-                    {getInitials(user.name)}
+                    {getInitials(user?.name || '')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden md:block">
@@ -177,7 +181,7 @@ const Dashboard = () => {
               <Sparkles className="h-6 w-6 text-blue-300" />
             </div>
             <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
-              Welcome back, {user.name.split(' ')[0]}!
+              Welcome back, {user?.name?.split(' ')[0]}!
             </h2>
           </div>
           <p className="text-gray-300 text-lg">Here's your content performance overview</p>
@@ -339,7 +343,7 @@ const Dashboard = () => {
                     <span>Growth Since Joining</span>
                   </CardTitle>
                   <CardDescription className="text-gray-400 mt-1">
-                    Member since {user.memberSince} • 6 months
+                    Member since  • 6 months
                   </CardDescription>
                 </div>
               </div>

@@ -73,13 +73,117 @@ const Cre8Canvas = () => {
 
     setLoading(true);
     setError("");
+    setGeneratedImage(null);
     
-    // Simulate API call - replace with actual Gemini nano-banana API call
-    setTimeout(() => {
-      // Mock generated image
-      setGeneratedImage("https://via.placeholder.com/1280x720/6366f1/ffffff?text=AI+Generated+Content");
+    try {
+      // Prepare the request based on whether images are uploaded
+      if (uploadedImages.length > 0) {
+        // Image-to-image generation
+        const baseImage = await fileToBase64(uploadedImages[0]);
+        const referenceImages = await Promise.all(
+          uploadedImages.slice(1, 4).map(file => fileToBase64(file))
+        );
+
+        const API_URL = 'http://localhost:7001'; // Direct URL for debugging
+        const response = await fetch(`${API_URL}/generate/image-to-image`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: prompt.trim(),
+            generation_type: selectedType,
+            base_image: baseImage,
+            reference_images: referenceImages,
+            strength: 0.75
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Failed to generate image');
+        }
+
+        const data = await response.json();
+        console.log('📦 [Image-to-Image] Response:', data);
+        console.log('🖼️ [Image-to-Image] First image type:', typeof data.images[0]);
+        console.log('🎨 [Image-to-Image] First image starts with:', data.images[0]?.substring(0, 50));
+        
+        if (data.success && data.images.length > 0) {
+          setGeneratedImage(data.images[0]);
+          console.log('✅ [Image-to-Image] Image set!');
+        } else {
+          throw new Error('No images generated');
+        }
+      } else {
+        // Text-to-image generation
+        const API_URL = 'http://localhost:7001'; // Direct URL for debugging
+        const response = await fetch(`${API_URL}/generate/text-to-image`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: prompt.trim(),
+            generation_type: selectedType,
+            num_images: 1
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Failed to generate image');
+        }
+
+        const data = await response.json();
+        console.log('📦 [Text-to-Image] Response:', data);
+        console.log('🖼️ [Text-to-Image] Images length:', data.images?.length);
+        console.log('🎨 [Text-to-Image] First image starts with:', data.images[0]?.substring(0, 50));
+        
+        if (data.success && data.images.length > 0) {
+          setGeneratedImage(data.images[0]);
+          console.log('✅ [Text-to-Image] Image set successfully!');
+        } else {
+          throw new Error('No images generated');
+        }
+      }
+    } catch (err: any) {
+      console.error('Generation error:', err);
+      setError(
+        `Failed to connect to AI server at http://localhost:7001. ` +
+        `Error: ${err.message}. ` +
+        `Make sure the Cre8Canvas server is running on port 7001.`
+      );
+    } finally {
       setLoading(false);
-    }, 3000);
+    }
+  };
+
+  // Helper function to convert File to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Download generated image
+  const handleDownload = () => {
+    if (!generatedImage) return;
+    
+    const link = document.createElement('a');
+    link.href = generatedImage;
+    link.download = `cre8canvas-${selectedType}-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -244,19 +348,21 @@ const Cre8Canvas = () => {
               </Card>
 
               {/* Image Upload Section */}
-              <Card className="bg-white/5 backdrop-blur-xl border border-white/10">
+              <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/5 backdrop-blur-xl border-2 border-blue-500/30 shadow-lg shadow-blue-500/20">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center space-x-2">
-                    <ImageIcon className="h-5 w-5 text-blue-400" />
+                    <div className="p-2 bg-blue-500/20 rounded-lg">
+                      <ImageIcon className="h-5 w-5 text-blue-300" />
+                    </div>
                     <span>Reference Images (Optional)</span>
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Upload images for style reference or elements to include
+                  <CardDescription className="text-gray-300">
+                    💡 Upload images for style reference or elements to include in your design
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Upload Button */}
-                  <label className="cursor-pointer">
+                  <label className="cursor-pointer block">
                     <input
                       type="file"
                       accept="image/*"
@@ -367,13 +473,21 @@ const Cre8Canvas = () => {
                         src={generatedImage}
                         alt="Generated content"
                         className="w-full h-auto"
+                        onLoad={() => console.log('✅ Image loaded successfully in DOM')}
+                        onError={(e) => {
+                          console.error('❌ Image failed to load:', e);
+                          console.error('Image src:', generatedImage?.substring(0, 100));
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap gap-3 justify-center">
-                      <Button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6">
+                      <Button 
+                        onClick={handleDownload}
+                        className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6"
+                      >
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Download
                       </Button>
@@ -383,7 +497,8 @@ const Cre8Canvas = () => {
                       </Button>
                       <Button 
                         onClick={handleGenerate}
-                        className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-6"
+                        disabled={loading}
+                        className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-6 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Wand2 className="w-4 h-4 mr-2" />
                         Regenerate
