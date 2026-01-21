@@ -24,7 +24,7 @@ python-dotenv
 pydantic
 # Google GenAI (compatible with both cre8echo and cre8canvas)
 langchain-google-genai==1.0.10
-google-generativeai>=0.8.0
+#google-generativeai>=0.8.0
 pandas
 python-multipart
 qdrant-client
