@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useBackendAuth } from "@/hooks/useBackendAuth";
 
@@ -20,6 +20,7 @@ const formSchema = z.object({
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { signIn } = useBackendAuth();
   
@@ -52,7 +53,8 @@ const SignIn = () => {
       title: "Welcome back!",
       description: "You have successfully signed in.",
     });
-    navigate("/");
+    const redirect = searchParams.get('redirect');
+    navigate(redirect || "/");
   };
 
   return (

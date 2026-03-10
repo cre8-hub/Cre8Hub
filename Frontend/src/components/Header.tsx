@@ -50,6 +50,10 @@ export const Header = () => {
       link: "/showcase",
     },
     {
+      name: "Store",
+      link: "/cre8store",
+    },
+    {
       name: "Pricing",
       link: "/#pricing",
     },
