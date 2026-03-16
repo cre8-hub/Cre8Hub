@@ -3,7 +3,6 @@
 A comprehensive backend API for the Cre8Hub application built with Node.js, Express, and MongoDB.
 
 ## 🚀 Features
-
 - **User Authentication**: JWT-based authentication with sign-in/sign-up
 - **Unified User Model**: Single MongoDB model with embedded profile data
 - **Role-Based Profiles**: Support for content creators, entrepreneurs, and social media managers

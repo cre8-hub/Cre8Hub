@@ -11,6 +11,9 @@ import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut, User, Settings, Plus, Palette, Video, Sparkles, Clock, TrendingUp, Zap, Eye, Heart, MessageCircle, Share2, ArrowUp, ArrowDown, Users, Calendar, ThumbsUp, BarChart3, Lightbulb, Play, TrendingDown, Rocket, Store } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../public/lovable-uploads/logomain.png';
 import { useBackendAuth } from '@/hooks/useBackendAuth';
@@ -91,22 +94,102 @@ const Dashboard = () => {
   ];
 
   const features = [
-    { name: "Cre8Echo", icon: Sparkles, route: "/cre8echo", status: "active" },
-    { name: "Cre8Canvas", icon: Palette, route: "/cre8canvas", status: "active" },
-    { name: "Cre8Motion", icon: Video, route: "", status: "soon" },
-    { name: "Cre8Sight", icon: TrendingUp, route: "/cre8sight", status: "active" },
-    { name: "Cre8Reach", icon: Target, route: "", status: "soon" },
-    { name: "Cre8Flow", icon: Zap, route: "", status: "soon" },
+    {
+      name: "Cre8Echo",
+      description: "Extract your creator persona and generate personalized scripts, captions, and ideas",
+      icon: Sparkles,
+      status: "active",
+      gradient: "from-blue-600/20 via-purple-600/10 to-slate-800",
+      accentColor: "blue"
+    },
+    {
+      name: "Cre8Canvas",
+      description: "Create eye-catching, high-converting thumbnails with AI-powered image generation",
+      icon: Palette,
+      status: "active",
+      gradient: "from-purple-600/20 via-pink-600/10 to-slate-800",
+      accentColor: "purple"
+    },
+    {
+      name: "Cre8Motion",
+      description: "Transform scripts into engaging short-form videos with automated editing",
+      icon: Video,
+      status: "coming-soon",
+      gradient: "from-slate-700/50 to-slate-800",
+      accentColor: "indigo"
+    },
+    {
+      name: "Cre8Sight",
+      description: "Track engagement, identify trends, and understand what drives growth",
+      icon: TrendingUp,
+      status: "coming-soon",
+      gradient: "from-slate-700/50 to-slate-800",
+      accentColor: "violet"
+    },
+    {
+      name: "Cre8Boost",
+      description: "Mark projects launch-ready. Get promo assets, multi-platform copy, and distribute to social and Cre8Hub showcase",
+      icon: Rocket,
+      status: "active",
+      gradient: "from-cyan-600/20 via-blue-600/10 to-slate-800",
+      accentColor: "cyan"
+    },
+    {
+      name: "Cre8Store",
+      description: "Launch your own storefront, list products, and manage customer orders from one dashboard",
+      icon: Store,
+      status: "active",
+      gradient: "from-emerald-600/20 via-cyan-600/10 to-slate-800",
+      accentColor: "emerald"
+    },
+    {
+      name: "Cre8Flow",
+      description: "Automate repetitive tasks from ideation to publishing",
+      icon: Zap,
+      status: "coming-soon",
+      gradient: "from-slate-700/50 to-slate-800",
+      accentColor: "emerald"
+    }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      {/* ================= HEADER ================= */}
-      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <img src={logo} className="h-10 w-10 cursor-pointer" onClick={() => navigate('/')} />
-            <h1 className="text-xl font-bold">Creator Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Header */}
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+                <img src={logo} alt="Cre8Hub" className="h-16 w-16" onClick={() => navigate('/')}/>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Creator Dashboard</h1>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg shadow-blue-500/30 transition-all"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Create Content
+              </Button>
+              
+              <div className="flex items-center space-x-3">
+                <Avatar className="h-8 w-8 ring-2 ring-purple-500/30 ring-offset-2 ring-offset-slate-900" onClick={() => navigate('/profile-setup')}>
+                  <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                    {getInitials(user?.name || '')}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden md:block">
+                  <p className="text-sm font-medium text-white">{user.name}</p>
+                  <p className="text-xs text-gray-400">{user.email}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <Button className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600">
@@ -224,6 +307,31 @@ const Dashboard = () => {
                   <Line dataKey="engagement" stroke="#a855f7" />
                 </LineChart>
               </ResponsiveContainer>
+              <div className="space-y-3">
+                <Button 
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg justify-start transition-all"
+                  onClick={() => navigate('/cre8echo')}
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Open Cre8Echo
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/30 rounded-full justify-start transition-all"
+                  onClick={() => navigate('/cre8store')}
+                >
+                  <Store className="h-4 w-4 mr-2" />
+                  Open Cre8Store
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/30 rounded-full justify-start transition-all"
+                  onClick={() => navigate('/profile-setup')}
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>

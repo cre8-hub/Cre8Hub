@@ -24,8 +24,16 @@ const authenticateToken = async (req, res, next) => {
       });
     }
 
+    const resolvedUserId = decoded.userId || decoded.id;
+    if (!resolvedUserId) {
+      return res.status(403).json({ 
+        error: 'Invalid token',
+        message: 'Token is missing user identifier'
+      });
+    }
+
     // Check if user still exists in database
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(resolvedUserId);
 
     if (!user) {
       return res.status(401).json({ 
@@ -43,11 +51,15 @@ const authenticateToken = async (req, res, next) => {
     }
 
     // Add user info to request
+    const resolvedRole = decoded.role || decoded.userRole || user.userRole || null;
     req.user = {
-      userId: decoded.userId,
+      userId: resolvedUserId,
+      id: decoded.id || resolvedUserId,
       email: decoded.email,
-      userRole: decoded.userRole,
+      userRole: resolvedRole,
+      role: resolvedRole,
       fullName: user.fullName,
+      name: user.fullName,
       profileCompleted: user.profileCompleted
     };
 
@@ -71,14 +83,18 @@ const optionalAuth = async (req, res, next) => {
       const decoded = verifyJWT(token);
       
       if (decoded) {
-        const user = await User.findById(decoded.userId);
+        const resolvedUserId = decoded.userId || decoded.id;
+        const user = resolvedUserId ? await User.findById(resolvedUserId) : null;
         
         if (user && user.isActive) {
           req.user = {
-            userId: decoded.userId,
+            userId: resolvedUserId,
+            id: decoded.id || resolvedUserId,
             email: decoded.email,
-            userRole: decoded.userRole,
+            userRole: decoded.role || decoded.userRole || user.userRole,
+            role: decoded.role || decoded.userRole || user.userRole,
             fullName: user.fullName,
+            name: user.fullName,
             profileCompleted: user.profileCompleted
           };
         }

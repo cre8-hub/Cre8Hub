@@ -19,6 +19,17 @@ import YouTubeCallback from "./pages/YouTubeCallback";
 import Cre8Canvas from "./pages/Cre8Canvas";
 import Cre8Sight from "./pages/Cre8Sight";
 
+import Cre8Boost from "./pages/Cre8Boost";
+import Features from "./pages/Features";
+import Showcase from "./pages/Showcase";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import Cre8Store from "./pages/Cre8Store";
+import PublicStore from "./pages/PublicStore";
+import PublicStoreProduct from "./pages/PublicStoreProduct";
+import StoreSuccess from "./pages/StoreSuccess";
+import StoreCancel from "./pages/StoreCancel";
+import StoreAccess from "./pages/StoreAccess";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -31,12 +42,26 @@ const App = () => (
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Landing />} />
+                  <Route path="/features" element={<Features />} />
+                  <Route path="/showcase" element={<Showcase />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/signin" element={
                     <ProtectedRoute requireAuth={false}>
                       <SignIn />
                     </ProtectedRoute>
                   } />
+                  <Route path="/login" element={
+                    <ProtectedRoute requireAuth={false}>
+                      <SignIn />
+                    </ProtectedRoute>
+                  } />
                   <Route path="/signup" element={
+                    <ProtectedRoute requireAuth={false}>
+                      <SignUp />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/register" element={
                     <ProtectedRoute requireAuth={false}>
                       <SignUp />
                     </ProtectedRoute>
@@ -76,6 +101,27 @@ const App = () => (
                       <Cre8Canvas />
                     </ProtectedRoute>
                   } />
+                  <Route path="/cre8boost" element={
+                    <ProtectedRoute requireAuth={true}>
+                      <Cre8Boost />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/cre8store" element={
+                    <ProtectedRoute requireAuth={true}>
+                      <Cre8Store />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard/store" element={
+                    <ProtectedRoute requireAuth={true}>
+                      <Cre8Store />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/store/:slug" element={<PublicStore />} />
+                  <Route path="/store/:slug/product/:productId" element={<PublicStoreProduct />} />
+                  <Route path="/success" element={<StoreSuccess />} />
+                  <Route path="/cancel" element={<StoreCancel />} />
+                  <Route path="/access" element={<StoreAccess />} />
+                  <Route path="/store/checkout-success" element={<StoreSuccess />} />
                   <Route path="/auth/youtube/callback" element={<YouTubeCallback />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
