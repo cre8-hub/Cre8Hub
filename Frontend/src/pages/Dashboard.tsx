@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User, Settings, Plus, Palette, Video, Sparkles, Clock, TrendingUp, Zap, Eye, Heart, MessageCircle, Share2, ArrowUp, ArrowDown, Users, Calendar, ThumbsUp, BarChart3, Lightbulb, Play, TrendingDown, Rocket } from "lucide-react";
+import { LogOut, User, Settings, Plus, Palette, Video, Sparkles, Clock, TrendingUp, Zap, Eye, Heart, MessageCircle, Share2, ArrowUp, ArrowDown, Users, Calendar, ThumbsUp, BarChart3, Lightbulb, Play, TrendingDown, Rocket, Store } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../public/lovable-uploads/logomain.png';
@@ -119,6 +119,14 @@ const Dashboard = () => {
       status: "active",
       gradient: "from-cyan-600/20 via-blue-600/10 to-slate-800",
       accentColor: "cyan"
+    },
+    {
+      name: "Cre8Store",
+      description: "Launch your own storefront, list products, and manage customer orders from one dashboard",
+      icon: Store,
+      status: "active",
+      gradient: "from-emerald-600/20 via-cyan-600/10 to-slate-800",
+      accentColor: "emerald"
     },
     {
       name: "Cre8Flow",
@@ -643,6 +651,7 @@ const Dashboard = () => {
               <div className="space-y-3">
                 <Button 
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg justify-start transition-all"
+                  onClick={() => navigate('/cre8echo')}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
                   Open Cre8Echo
@@ -650,13 +659,15 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/30 rounded-full justify-start transition-all"
+                  onClick={() => navigate('/cre8store')}
                 >
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  View Full Analytics
+                  <Store className="h-4 w-4 mr-2" />
+                  Open Cre8Store
                 </Button>
                 <Button 
                   variant="outline" 
                   className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/30 rounded-full justify-start transition-all"
+                  onClick={() => navigate('/profile-setup')}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Settings

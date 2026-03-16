@@ -111,6 +111,86 @@ class ApiService {
       body: JSON.stringify(roleData),
     });
   }
+
+  // Store endpoints
+  async getMyStore() {
+    return this.request('/stores/mine');
+  }
+
+  async createStore(storeName: string) {
+    return this.request('/stores', {
+      method: 'POST',
+      body: JSON.stringify({ storeName }),
+    });
+  }
+
+  async updateMyStore(storeData: any) {
+    return this.request('/stores/mine', {
+      method: 'PATCH',
+      body: JSON.stringify(storeData),
+    });
+  }
+
+  async publishStore(storeId: string) {
+    return this.request(`/stores/${storeId}/publish`, {
+      method: 'POST',
+    });
+  }
+
+  async getPublicStore(slug: string) {
+    return this.request(`/stores/public/${slug}`);
+  }
+
+  // Product endpoints
+  async getMyProducts() {
+    return this.request('/products/mine');
+  }
+
+  async getProductById(productId: string) {
+    return this.request(`/products/${productId}`);
+  }
+
+  async createProduct(productData: any) {
+    return this.request('/products', {
+      method: 'POST',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async updateProduct(productId: string, productData: any) {
+    return this.request(`/products/${productId}`, {
+      method: 'PUT',
+      body: JSON.stringify(productData),
+    });
+  }
+
+  async publishProduct(productId: string) {
+    return this.request(`/products/${productId}/publish`, {
+      method: 'PATCH',
+    });
+  }
+
+  async deleteProduct(productId: string) {
+    return this.request(`/products/${productId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Order endpoints
+  async createOrder(orderData: any) {
+    return this.request('/orders', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  }
+
+  async getMySales() {
+    return this.request('/orders/my-sales');
+  }
+
+  async getMyPurchases() {
+    return this.request('/orders/my-purchases');
+  }
   // Persona endpoints
   async extractPersonaFromYouTube(userId: string) {
     return this.request('/youtube/extract-persona', {

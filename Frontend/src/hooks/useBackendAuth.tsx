@@ -5,8 +5,10 @@ import { useToast } from './use-toast';
 interface User {
   avatar: string;
   id: string;
+  _id?: string;
   email: string;
   name: string;
+  fullName?: string;
   userRole?: string;
   profileCompleted?: boolean;
   persona?: any;
@@ -23,6 +25,16 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const normalizeUser = (rawUser: any): User => {
+  const normalizedName = rawUser?.name || rawUser?.fullName || '';
+  return {
+    ...rawUser,
+    id: rawUser?.id || rawUser?._id || '',
+    name: normalizedName,
+    fullName: rawUser?.fullName || normalizedName,
+  };
+};
 
 export const useBackendAuth = () => {
   const context = useContext(AuthContext);
@@ -50,15 +62,17 @@ export const BackendAuthProvider = ({ children }: { children: React.ReactNode })
           typeof result.data.data === 'object' &&
           'user' in result.data.data
       ) {
-        setUser(result.data.data.user as User);
+        setUser(normalizeUser(result.data.data.user));
       } else {
         setUser(null);
         localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
       }
     } catch (error) {
       setUser(null);
       localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
     }
   };
@@ -91,9 +105,10 @@ export const BackendAuthProvider = ({ children }: { children: React.ReactNode })
 
         // Store token
         localStorage.setItem('authToken', token);
+        localStorage.setItem('token', token);
         
         // Set user
-        setUser(user);
+        setUser(normalizeUser(user));
         
         toast({
           title: "Welcome back!",
@@ -143,9 +158,10 @@ export const BackendAuthProvider = ({ children }: { children: React.ReactNode })
 
         // Store token
         localStorage.setItem('authToken', token);
+        localStorage.setItem('token', token);
         
         // Set user
-        setUser(user);
+        setUser(normalizeUser(user));
         
         toast({
           title: "Welcome to Cre8Hub!",
@@ -177,6 +193,7 @@ export const BackendAuthProvider = ({ children }: { children: React.ReactNode })
     } finally {
       // Clear all authentication data from localStorage
       localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
       
       // Clear any other auth-related data

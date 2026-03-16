@@ -33,8 +33,10 @@ const signIn = async (req, res, next) => {
     // Create JWT token
     const token = createJWT({
       userId: result.user._id,
+      id: result.user._id,
       email: result.user.email,
-      userRole: result.user.userRole
+      userRole: result.user.userRole,
+      role: result.user.userRole,
     });
 
     // Update last login
@@ -86,8 +88,10 @@ const signUp = async (req, res, next) => {
     // Create JWT token
     const token = createJWT({
       userId: result.user._id,
+      id: result.user._id,
       email: result.user.email,
-      userRole: result.user.userRole
+      userRole: result.user.userRole,
+      role: result.user.userRole,
     });
 
     res.status(201).json({
