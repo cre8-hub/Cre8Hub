@@ -17,6 +17,8 @@ import Cre8Echo from "./pages/Cre8Echo";
 import Dashboard from "./pages/Dashboard";
 import YouTubeCallback from "./pages/YouTubeCallback";
 import Cre8Canvas from "./pages/Cre8Canvas";
+import Cre8Sight from "./pages/Cre8Sight";
+
 import Cre8Boost from "./pages/Cre8Boost";
 import Features from "./pages/Features";
 import Showcase from "./pages/Showcase";
@@ -79,6 +81,21 @@ const App = () => (
                       <Cre8Echo />
                     </ProtectedRoute>
                   } />
+                  <Route path="/cre8sight" element={
+                    <ProtectedRoute requireAuth={true}>
+                       <Cre8Sight />
+                    </ProtectedRoute> 
+                  }  />  
+
+
+  
+  
+    
+     
+    
+  
+
+
                   <Route path="/cre8canvas" element={
                     <ProtectedRoute requireAuth={true}>
                       <Cre8Canvas />

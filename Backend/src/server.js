@@ -6,10 +6,15 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
+
+
+
 //routes
 const userRoutes = require('./routes/userRoutes');
 const youtubeRoutes = require('./routes/youtubeRoutes');
 const oauthRoutes = require('./routes/oauthRoutes');
+const trendRoutes = require("./routes/trend.routes");
+
 const authStoreRoutes = require('./routes/authStoreRoutes');
 const storeRoutes = require('./routes/storeRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -105,6 +110,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authStoreRoutes);
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/oauth", oauthRoutes);
+app.use("/api/trends", trendRoutes);
+app.use('/api/cre8sight', require('./routes/cre8sight.routes'));
+
+
 app.use('/api/stores', storeRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
